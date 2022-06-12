@@ -6,7 +6,8 @@ Represents either a fixed length or unlimited length set of text
 
 
 class Text:
-    def __init__(self):
+    def __init__(self, length=None):
+        self.length = length
         self.table = None
         self.name = None
 

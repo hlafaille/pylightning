@@ -10,9 +10,10 @@ lower_case_tables=False --- When True is passed, table names will be automatical
 
 
 class SelectBuilder:
-    def __init__(self, columns: list, lower_case_tables=False):
+    def __init__(self, columns: list, lower_case_tables=False, joins=None):
         # args passed on class instantiation
         self.columns = columns
+        self.joins = joins
 
         # variables that will change
         self.tables_encountered = []
@@ -52,4 +53,21 @@ class SelectBuilder:
         else:
             # looks like there was more than one table specified, attempting to get 'JOIN'
             base_sql += "FROM {0}".format(list(set(self.tables_encountered))[0])
+
+            # lets figure out how we're gonna get this join done :/
+            for element, join in enumerate(self.joins):
+                if self.lower_case_tables:
+                    left_table_name = join.left_column.table.__class__.__name__.lower()
+                    right_table_name = join.right_column.table.__class__.__name__.lower()
+                else:
+                    left_table_name = join.left_column.table.__class__.__name__
+                    right_table_name = join.right_column.table.__class__.__name__
+
+                # determine if this is a left or right join
+                if join.join_type == join.LEFT_JOIN:
+                    base_sql += " LEFT JOIN"
+                elif join.join_type == join.RIGHT_JOIN:
+                    base_sql += " RIGHT JOIN"
+
+                base_sql += " WHERE {0}.{1}={2}.{3}".format(left_table_name, join.left_column.name, right_table_name, join.right_column.name)
         return base_sql
