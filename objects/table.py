@@ -3,23 +3,12 @@ class Table:
 ----
 This class is a physical representation of a table in an SQL database.
 """
-#from objects.bigint import BigInt
-import inspect
-
-from objects.decimal import Decimal
-from objects.integer import Integer
-from objects.smallint import SmallInt
-from objects.text import Text
-
-
-#LIST_OF_TYPES = [BigInt, Decimal, Integer, SmallInt, Text]
-from registries.table_registry import TableRegistry
 
 
 class Table:
     __all = "*"
 
-    def __init__(self, table_registry: TableRegistry):
+    def __init__(self):
         self._register_self()
 
     # returns all class variables
