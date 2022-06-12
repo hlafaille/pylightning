@@ -1,0 +1,2 @@
+# pylightning
+Pylightning is my solution to the crap code completion situation with SQLAlchemy. I will try to be reimplementing most of the basic functionality that I'll find useful in my day to day use at work and personal projects in the way I want it to be done.
