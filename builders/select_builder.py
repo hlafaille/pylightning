@@ -57,17 +57,19 @@ class SelectBuilder:
             # lets figure out how we're gonna get this join done :/
             for element, join in enumerate(self.joins):
                 if self.lower_case_tables:
+                    to_join_table_name = join.to_join_table.__name__.lower()
                     left_table_name = join.left_column.table.__class__.__name__.lower()
                     right_table_name = join.right_column.table.__class__.__name__.lower()
                 else:
+                    to_join_table_name = join.to_join_table.__name__
                     left_table_name = join.left_column.table.__class__.__name__
                     right_table_name = join.right_column.table.__class__.__name__
 
                 # determine if this is a left or right join
                 if join.join_type == join.LEFT_JOIN:
-                    base_sql += " LEFT JOIN"
+                    base_sql += " LEFT JOIN {0}".format(to_join_table_name)
                 elif join.join_type == join.RIGHT_JOIN:
-                    base_sql += " RIGHT JOIN"
+                    base_sql += " RIGHT JOIN {0}".format(to_join_table_name)
 
-                base_sql += " WHERE {0}.{1}={2}.{3}".format(left_table_name, join.left_column.name, right_table_name, join.right_column.name)
+                base_sql += " ON {0}.{1}={2}.{3}".format(left_table_name, join.left_column.name, right_table_name, join.right_column.name)
         return base_sql
