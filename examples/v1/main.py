@@ -39,8 +39,7 @@ Now simply define in a builder the columns you want, and any settings the builde
 """
 
 get_transactions = SelectBuilder(columns=[transactions.id, transactions.total, Employees.first_name, Employees.last_name],
-                                 joins=[Join(to_join_table=Employees, left_column=transactions.employee, right_column=employees.id)],
-                                 lower_case_tables=True)
+                                 lower_case_tables=True).join(Join(to_join_table=Employees, left_column=transactions.employee, right_column=employees.id))
 
 """
 The __str__ of all builders will always return the valid SQL statement based on your input.

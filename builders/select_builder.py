@@ -7,13 +7,14 @@ SelectBuilder takes a list of columns specified in classes that subclass the Tab
 SelectBuilder also contains some settings:
 lower_case_tables=False --- When True is passed, table names will be automatically lowercase to allow class names to conform with PEP-8
 """
+from objects.join import Join
 
 
 class SelectBuilder:
-    def __init__(self, columns: list, lower_case_tables=False, joins=None):
+    def __init__(self, columns: list, lower_case_tables=False):
         # args passed on class instantiation
         self.columns = columns
-        self.joins = joins
+        self.joins = [ ]
 
         # variables that will change
         self.tables_encountered = []
@@ -21,9 +22,15 @@ class SelectBuilder:
         # Settings
         self.lower_case_tables = lower_case_tables
 
+    # Appends a Join object
+    def join(self, join: Join):
+        self.joins.append(join)
+        return self
+
     # Return the SQL command
     def __str__(self):
         base_sql = "SELECT"
+        first_table_encountered = ""
 
         # add columns
         for element, column in enumerate(self.columns):
@@ -47,12 +54,19 @@ class SelectBuilder:
             elif element == len(self.columns) - 1:
                 base_sql += "{0}.{1} ".format(table_name, column.name)
 
+            # set the first table encountered
+            if element == 0:
+                if self.lower_case_tables:
+                    first_table_encountered = column.table.__class__.__name__.lower()
+                else:
+                    first_table_encountered = column.table.__class__.__name__
+
         # add from table (if we've only seen one kind of table, append it...)
         if len(set(self.tables_encountered)) == 1:
-            base_sql += "FROM {0}".format(list(set(self.tables_encountered))[0])
+            base_sql += "FROM {0}".format(first_table_encountered)
         else:
             # looks like there was more than one table specified, attempting to get 'JOIN'
-            base_sql += "FROM {0}".format(list(set(self.tables_encountered))[0])
+            base_sql += "FROM {0}".format(first_table_encountered)
 
             # lets figure out how we're gonna get this join done :/
             for element, join in enumerate(self.joins):
