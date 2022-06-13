@@ -6,9 +6,8 @@ This class is a physical representation of a table in an SQL database.
 
 
 class Table:
-    __all = "*"
-
     def __init__(self):
+        self._all = "*"
         self._register_self()
 
     # returns all class variables

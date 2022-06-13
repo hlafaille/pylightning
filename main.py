@@ -7,7 +7,9 @@ from objects.text import Text
 # define objects
 class Employees(Table):
     id = BigInt(primary=True)
-    first_nae = Text()
+    first_name = Text()
+    last_name = Text()
+    permissions = Text()
 
 
 class Transactions(Table):
@@ -19,8 +21,8 @@ employees = Employees()
 transactions = Transactions()
 
 # query generator
-get_administrators = SelectBuilder(columns=[Employees.id, Employees.first_nae, Transactions.id],
-                                   joins=[Join(to_join_table=Transactions, left_column=Employees.id, right_column=Transactions.id, join_type=Join.LEFT_JOIN)])
+get_administrators = SelectBuilder(columns=[Employees.id, Employees.first_name, Employees.last_name, Employees.permissions],
+                                   lower_case_tables=True)
 
 # print query
 print(get_administrators)
