@@ -38,8 +38,11 @@ transactions = Transactions()
 Now simply define in a builder the columns you want, and any settings the builder may support.
 """
 
-get_transactions = SelectBuilder(columns=[transactions.id, transactions.total, Employees.first_name, Employees.last_name],
-                                 lower_case_tables=True).join(Join(to_join_table=Employees, left_column=transactions.employee, right_column=employees.id))
+get_transactions = SelectBuilder(
+    columns=[transactions.id, transactions.total, Employees.first_name, Employees.last_name],
+    lower_case_tables=True).\
+    join(Join(to_join_table=Employees, left_column=transactions.employee, right_column=employees.id)).\
+    group_by(transactions.id)
 
 """
 The __str__ of all builders will always return the valid SQL statement based on your input.

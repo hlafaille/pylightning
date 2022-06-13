@@ -14,7 +14,12 @@ class SelectBuilder:
     def __init__(self, columns: list, lower_case_tables=False):
         # args passed on class instantiation
         self.columns = columns
-        self.joins = [ ]
+
+        # set by join()
+        self.joins = []
+
+        # set by group_by()
+        self.group_by_column = ""
 
         # variables that will change
         self.tables_encountered = []
@@ -22,9 +27,15 @@ class SelectBuilder:
         # Settings
         self.lower_case_tables = lower_case_tables
 
+    # todo replace with the same arguments from the Join object
     # Appends a Join object
     def join(self, join: Join):
         self.joins.append(join)
+        return self
+
+    # Sets a group by column
+    def group_by(self, group_by):
+        self.group_by_column = group_by
         return self
 
     # Return the SQL command
