@@ -72,4 +72,7 @@ class SelectBuilder:
                     base_sql += " RIGHT JOIN {0}".format(to_join_table_name)
 
                 base_sql += " ON {0}.{1}={2}.{3}".format(left_table_name, join.left_column.name, right_table_name, join.right_column.name)
+
+        # append ';'
+        base_sql += ";"
         return base_sql
