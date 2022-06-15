@@ -36,6 +36,10 @@ transactions = Transactions()
 
 """
 Now simply define in a builder the columns you want, and any settings the builder may support.
+Warning: pylightning runs close to ZERO checks when generating your SQL to verify if it is correct.
+This may be changed in the future to maybe have a development mode. For example, builders wont iterate
+over your provided columns to determine if their joins are valid, as this wastes valuable interpreter
+power. We leave this up to the database to raise an exception.
 """
 
 get_transactions = SelectBuilder(
